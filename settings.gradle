@@ -1,0 +1,5 @@
+rootProject.name='Junit-3.8.1'
+
+include (
+    'examples'
+)
