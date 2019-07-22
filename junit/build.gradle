@@ -1,0 +1,8 @@
+apply plugin: 'java'
+
+group = 'junit'
+
+buildDir = 'out/build'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
