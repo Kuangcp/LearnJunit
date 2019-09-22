@@ -5,11 +5,6 @@ buildDir = 'out/build'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-repositories {
-  mavenLocal()
-  jcenter()
-}
-
 dependencies {
-  implementation('junit.kcp:junit:3.8.1-SNAPSHOT')
+  implementation(project(":junit"))
 }
