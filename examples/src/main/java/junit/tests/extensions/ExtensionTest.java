@@ -6,84 +6,90 @@ import junit.tests.WasRun;
 
 /**
  * A test case testing the extensions to the testing framework.
- *
  */
 public class ExtensionTest extends TestCase {
-	static class TornDown extends TestSetup { 
-		boolean fTornDown= false;
-		
-		TornDown(Test test) {
-			super(test);
-		}
-		protected void tearDown() {
-			fTornDown= true;
-		}
-	}
-	public void testRunningErrorInTestSetup() {
-		TestCase test= new TestCase("failure") {
-			public void runTest() {
-				fail();
-			}
-		};
 
-		TestSetup wrapper= new TestSetup(test);
+  static class TornDown extends TestSetup {
 
-		TestResult result= new TestResult();
-		wrapper.run(result);
-		assertTrue(!result.wasSuccessful());
-	}
-	public void testRunningErrorsInTestSetup() {
-		TestCase failure= new TestCase("failure") {
-			public void runTest() {
-				fail();
-			}
-		};
+    boolean fTornDown = false;
 
-		TestCase error= new TestCase("error") {
-			public void runTest() {
-				throw new Error();
-			}
-		};
+    TornDown(Test test) {
+      super(test);
+    }
 
-		TestSuite suite= new TestSuite();
-		suite.addTest(failure);
-		suite.addTest(error);
-		
-		TestSetup wrapper= new TestSetup(suite);
+    protected void tearDown() {
+      fTornDown = true;
+    }
+  }
 
-		TestResult result= new TestResult();
-		wrapper.run(result);
+  public void testRunningErrorInTestSetup() {
+    TestCase test = new TestCase("failure") {
+      public void runTest() {
+        fail();
+      }
+    };
 
-		assertEquals(1, result.failureCount());
-		assertEquals(1, result.errorCount());
-	}
-	public void testSetupErrorDontTearDown() {
-		WasRun test= new WasRun();
+    TestSetup wrapper = new TestSetup(test);
 
-		TornDown wrapper= new TornDown(test) {
-			public void setUp() {
-				fail();
-			}
-		};
+    TestResult result = new TestResult();
+    wrapper.run(result);
+    assertTrue(!result.wasSuccessful());
+  }
 
-		TestResult result= new TestResult();
-		wrapper.run(result);
+  public void testRunningErrorsInTestSetup() {
+    TestCase failure = new TestCase("failure") {
+      public void runTest() {
+        fail();
+      }
+    };
 
-		assertTrue(!wrapper.fTornDown);
-	}
-	public void testSetupErrorInTestSetup() {
-		WasRun test= new WasRun();
+    TestCase error = new TestCase("error") {
+      public void runTest() {
+        throw new Error();
+      }
+    };
 
-		TestSetup wrapper= new TestSetup(test) {
-			public void setUp() {
-				fail();
-			}
-		};
+    TestSuite suite = new TestSuite();
+    suite.addTest(failure);
+    suite.addTest(error);
 
-		TestResult result= new TestResult();
-		wrapper.run(result);
+    TestSetup wrapper = new TestSetup(suite);
 
-		assertTrue(!test.fWasRun);
-		assertTrue(!result.wasSuccessful());
-	}
+    TestResult result = new TestResult();
+    wrapper.run(result);
+
+    assertEquals(1, result.failureCount());
+    assertEquals(1, result.errorCount());
+  }
+
+  public void testSetupErrorDontTearDown() {
+    WasRun test = new WasRun();
+
+    TornDown wrapper = new TornDown(test) {
+      public void setUp() {
+        fail();
+      }
+    };
+
+    TestResult result = new TestResult();
+    wrapper.run(result);
+
+    assertTrue(!wrapper.fTornDown);
+  }
+
+  public void testSetupErrorInTestSetup() {
+    WasRun test = new WasRun();
+
+    TestSetup wrapper = new TestSetup(test) {
+      public void setUp() {
+        fail();
+      }
+    };
+
+    TestResult result = new TestResult();
+    wrapper.run(result);
+
+    assertTrue(!test.fWasRun);
+    assertTrue(!result.wasSuccessful());
+  }
 }
